@@ -1,0 +1,26 @@
+{
+  "name": "drive-appdata-client",
+  "version": "0.0.1",
+  "description": "Manage files in AppData folder of Google drive",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drodimin/drive-appdata-client.git"
+  },
+  "keywords": [
+    "AppData"
+  ],
+  "author": "Dmitriy Rodimin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drodimin/drive-appdata-client/issues"
+  },
+  "homepage": "https://github.com/drodimin/drive-appdata-client#readme",
+  "dependencies": {
+    "googleapis": "^47.0.0",
+    "jest": "^25.1.0"
+  }
+}
