@@ -1,6 +1,6 @@
 {
   "name": "drive-appdata-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Manage files in AppData folder of Google drive",
   "main": "index.js",
   "scripts": {
