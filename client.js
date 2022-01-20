@@ -1,56 +1,59 @@
-const {google} = require('googleapis');
+const { google } = require('googleapis');
 
-module.exports = class Client {   
-    constructor(authClient, verbose=false){``
+module.exports = class Client {
+    constructor(authClient, verbose = false) {
+        ``;
         this._verbose = verbose;
-        this._drive = google.drive({version: 'v3', auth: authClient});
+        this._drive = google.drive({ version: 'v3', auth: authClient });
     }
-    
-    log(...args){
-        if(this._verbose){
+
+    log(...args) {
+        if (this._verbose) {
             console.log(...args);
         }
     }
 
-    find(filename){
+    find(filename) {
         this.log("Find file", filename);
-        return new Promise((resolve, reject) => {    
-            try{       
+        return new Promise((resolve, reject) => {
+            try {
                 this._drive.files.list({
                     q: "name='" + filename + "'",
                     spaces: 'appDataFolder',
                     fields: 'nextPageToken, files(id, name)',
-                }).then(result => {
-                    resolve(result.data.files);
                 })
-                .catch(error => {
-                    reject(error)});
-            } catch(error) {
+                    .then(result => {
+                        resolve(result.data.files);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            } catch (error) {
                 reject(error);
             }
         });
     }
 
-    update(fileId, data){
+    update(fileId, data) {
         this.log("Update file", fileId);
         return new Promise((resolve, reject) => {
-            try{
+            try {
                 this._drive.files.update({
                     fileId,
                     media: {
                         mimeType: 'application/json',
                         body: data
-                    }})
+                    }
+                })
                     .then(file => resolve(file.data))
                     .catch(error => reject(error));
-            } catch(error) {
+            } catch (error) {
                 reject(error);
             }
-        }); 
+        });
     }
 
-    create(fileName, data)
-    {
+    create(fileName, data) {
         this.log("Update file", fileName);
         return new Promise((resolve, reject) => {
             var fileMetadata = {
@@ -61,29 +64,30 @@ module.exports = class Client {
                 mimeType: 'application/json',
                 body: data
             };
-            try{
+            try {
                 this._drive.files.create({
-                        resource: fileMetadata,
-                        media: media,
-                        fields: 'id'
-                    }).then(file => resolve(file.data))
+                    resource: fileMetadata,
+                    media: media,
+                    fields: 'id'
+                })
+                    .then(file => resolve(file.data))
                     .catch(error => reject(error));
-            } catch (error) {
-                reject(error);
-            }                
-        });
-    }
-
-    get(fileId){
-        console.log("Getting file", fileId);
-        return new Promise((resolve, reject) => {
-            try{
-                this._drive.files.get({fileId, alt: 'media'})
-                .then(file => resolve(file.data))
-                .catch(error => reject(error));
             } catch (error) {
                 reject(error);
             }
         });
     }
-}
+
+    get(fileId) {
+        console.log("Getting file", fileId);
+        return new Promise((resolve, reject) => {
+            try {
+                this._drive.files.get({ fileId, alt: 'media' })
+                    .then(file => resolve(file.data))
+                    .catch(error => reject(error));
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+};
