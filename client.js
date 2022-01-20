@@ -34,6 +34,27 @@ module.exports = class Client {
         });
     }
 
+    findAll() {
+        this.log("Find all files");
+        return new Promise((resolve, reject) => {
+            try {
+                this._drive.files.list({
+                    spaces: 'appDataFolder',
+                    fields: 'nextPageToken, files(id, name)',
+                    pageSize: 1000
+                })
+                    .then(result => {
+                        resolve(result.data.files);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
     update(fileId, data) {
         this.log("Update file", fileId);
         return new Promise((resolve, reject) => {
@@ -46,6 +67,21 @@ module.exports = class Client {
                     }
                 })
                     .then(file => resolve(file.data))
+                    .catch(error => reject(error));
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    delete(fileId) {
+        this.log("Delete file", fileId);
+        return new Promise((resolve, reject) => {
+            try {
+                this._drive.files.delete({
+                    fileId
+                })
+                    .then(() => resolve())
                     .catch(error => reject(error));
             } catch (error) {
                 reject(error);
