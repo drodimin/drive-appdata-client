@@ -34,8 +34,8 @@ module.exports = class Client {
         });
     }
 
-    findAll() {
-        this.log("Find all files");
+    list() {
+        this.log("List all files");
         return new Promise((resolve, reject) => {
             try {
                 this._drive.files.list({

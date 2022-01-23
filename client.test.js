@@ -7,7 +7,6 @@ const mockGet = jest.fn();
 
 const driveFiles = {files:{
     list:mockList,
-    listall:mockListAll,
     update:mockUpdate,
     delete:mockDelete,
     create:mockCreate,
@@ -58,24 +57,25 @@ describe('find', ()=>{
     })
 });
 
-describe('findall', ()=>{    
-    it('resolved to data.files property of drive.files.list result', async() => {
+describe('list', ()=>{    
+    it('resolves to data.files property of drive.files.list result', async() => {
         //arrange
-        mockListAll.mockImplementation((a)=>Promise.resolve());
+        const foundFiles = ['test1', 'test2'];
+        const result = {data:{files:foundFiles}};
+        mockList.mockImplementation((a)=>Promise.resolve(result));
         const client = new Client({});
 
         //act, assert
-        //gets rejected when called
-        await expect(client.findAll()).rejects.toEqual(error);
+        await expect(client.list()).resolves.toEqual(foundFiles);
     })
 
     it('rejects when drive.files.list rejects', async() => {
         //arrange
-        mockListAll.mockImplementation((a)=>Promise.reject(error));
+        mockList.mockImplementation((a)=>Promise.reject(error));
         const client = new Client({});
     
         //act, assert
-        await expect(client.findAll()).rejects.toEqual(error);
+        await expect(client.list()).rejects.toEqual(error);
     })
 
     it('rejects when drive.files.list throws error', async() => {
@@ -84,7 +84,7 @@ describe('findall', ()=>{
         const client = new Client({});
     
         //act, assert
-        await expect(client.findAll()).rejects.toEqual(error);
+        await expect(client.list()).rejects.toEqual(error);
     })
 });
 
@@ -126,22 +126,26 @@ describe('update', ()=>{
 describe('delete', ()=>{ 
     const client = new Client({});
     const fileId = '1';
+    mockDelete.mockImplementation((arg)=>{
+        console.log('delete arg:', arg);
+        if(arg.fileId === fileId) {
+            return Promise.resolve();
+        }
+        else {
+            return Promise.reject(error);
+        }
+    });
     
-    it('resolves to data property of drive.files.delete result', async() => {
-        //arrange
-        mockDelete.mockImplementation((a)=>Promise.resolve({data:{}}));
-    
-        //act, assert
-        //returns undefined when file got deleted
-        await expect(client.delete(fileId)).resolves.toEqual(undefined);
+    it('resolves promise when no errors', async() => {
+        //arrange, act, assert
+        await expect(client.delete(fileId)).resolves.not.toThrow();
     })
 
     it('rejects when drive.files.delete rejects', async() => {
         //arrange
-        mockDelete.mockImplementation((a)=>Promise.reject(error));
-    
+        
         //act, assert
-        await expect(client.delete(fileId)).rejects.toEqual(error);
+        await expect(client.delete('2')).rejects.toEqual(error);
     })
 
     it('rejects when drive.files.delete throws error', async() => {
