@@ -1,6 +1,6 @@
 {
   "name": "drive-appdata-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Manage files in AppData folder of Google drive",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/drodimin/drive-appdata-client#readme",
   "dependencies": {
-    "googleapis": "^66.0.0",
-    "jest": "^25.5.4"
+    "googleapis": "^92.0.0",
+    "jest": "^27.4.7"
   }
 }
